@@ -55,7 +55,8 @@ def start_test(request):
                 order = ColorOrder(member=member, table=table, position=i + 1)  # Элемент последовательности
                 order.save()  # Сохранить
 
-            return redirect('color_table', table_pk=1, member_pk=member.pk)
+            first_table = ColorTable.objects.get(name=random_tables[0])
+            return redirect('color_table', table_pk=first_table.pk, member_pk=member.pk)
         else:
             message = 'Форма не корректна. Пожалуйста, исправьте ошибки'
     else:
