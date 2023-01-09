@@ -27,6 +27,14 @@ def start_img(request):
             member = Member(name=request.POST['name'], duration=request.POST['duration'], experiment="Картинки")
             member.save()  # Сохранить
 
+            images_second = list(ImgSample.objects.filter(second=True))  # Получить все таблицы
+            random.shuffle(images_second)
+
+            for i in range(len(images_second)):
+                table = images_second[i]
+                order = ColorOrder(member=member, image=table, position=i + 1)  # Элемент последовательности
+                order.save()  # Сохранить
+
             first_table = ImgSample.objects.get(num=1, first=True)
             return redirect('img_table', img_pk=first_table.num, member_pk=member.pk)
         else:
@@ -152,11 +160,11 @@ def img_test(request, table_pk, member_pk):
     """Тест на память"""
     member = Member.objects.get(pk=member_pk)
     table_pk = int(table_pk)
+    img = ColorOrder.objects.get(member=member_pk, position=table_pk).image
     if request.method == 'POST':
         form = AnswerForm(request.POST, request.FILES)  # Выгрузить
         if form.is_valid():
-            img = ImgSample.objects.get(num=table_pk, second=True)
-            was_shown = (table_pk <= 36)
+            was_shown = (img.num <= 36)
             answer = Answer(answer=request.POST['answer'],
                             member=member,
                             image=img,
@@ -170,8 +178,6 @@ def img_test(request, table_pk, member_pk):
                 return render(request, 'end.html')
     else:
         form = AnswerForm()
-
-    img = ImgSample.objects.get(num=table_pk, second=True)
 
     context = {'img': img, 'member_pk': member_pk, 'form': form, 'table_pk': table_pk}
 

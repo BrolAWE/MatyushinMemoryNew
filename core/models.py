@@ -115,6 +115,7 @@ class ColorOrder(models.Model):
     """Порядок цветов"""
     member = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
     table = models.ForeignKey(ColorTable, on_delete=models.SET_NULL, null=True, blank=True)
+    image = models.ForeignKey(ImgSample, on_delete=models.SET_NULL, null=True, blank=True)
     position = models.IntegerField()
 
     def __str__(self):
