@@ -24,7 +24,8 @@ def start_img(request):
     if request.method == 'POST':
         form = MemberForm(request.POST, request.FILES)  # Выгрузить
         if form.is_valid():
-            member = Member(name=request.POST['name'], duration=request.POST['duration'], experiment="Картинки")
+            duration = int(request.POST['duration'])
+            member = Member(name=request.POST['name'], duration=duration, experiment="Картинки")
             member.save()  # Сохранить
 
             images_second = list(ImgSample.objects.filter(second=True))  # Получить все таблицы
@@ -35,8 +36,12 @@ def start_img(request):
                 order = ColorOrder(member=member, image=table, position=i + 1)  # Элемент последовательности
                 order.save()  # Сохранить
 
-            first_table = ImgSample.objects.get(num=1, first=True)
-            return redirect('img_table', img_pk=first_table.num, member_pk=member.pk)
+            if duration != 0:
+                first_table = ImgSample.objects.get(num=1, first=True)
+                return redirect('img_table', img_pk=first_table.num, member_pk=member.pk)
+            else:
+                context = {'next_table': 1, 'member_pk': member.pk}
+                return render(request, 'faq_img.html', context)
         else:
             message = 'Форма не корректна. Пожалуйста, исправьте ошибки'
     else:
