@@ -4,18 +4,20 @@
     <meta charset="UTF-8">
     <title>Тест с картинками</title>
 </head>
-<body>
-<img src="{{ img.url }}" alt="Responsive image" height="600">
-<form action="{% url "img_test" table_pk member_pk %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ message }}
-    <p>
-        Мы уже показывали Вам эту фотографию?
-    </p>
-    <p>
-        {{ form.answer }}
-        <input type="submit" value="Ответить"/>
-    </p>
-</form>
+<body style="background-color: #1b1b1b">
+<div align="center">
+    <img src="{{ img.url }}" alt="Responsive image" height="600">
+    <form action="{% url "img_test" table_pk member_pk %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ message }}
+        <p style="color: white">
+            Мы уже показывали Вам эту фотографию?
+        </p>
+        <p>
+            {{ form.answer }}
+            <input type="submit" value="Ответить"/>
+        </p>
+    </form>
+</div>
 </body>
 </html>
