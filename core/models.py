@@ -104,7 +104,7 @@ class ColorSample(models.Model):
 class Member(models.Model):
     """Участник эксперимента"""
     name = models.CharField(max_length=50)
-    duration = models.IntegerField(verbose_name="Длительность в мс", default=2000)
+    duration = models.IntegerField(verbose_name="Длительность в мс", default=0)
     experiment = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
