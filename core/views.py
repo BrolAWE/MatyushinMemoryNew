@@ -198,12 +198,14 @@ def export_xls(request):
     row_num = 0
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
-    columns = ['id ответа', 'id участника', 'Имя участника', 'Название таблицы', 'Ответ участника', 'Был показан']
+    columns = ['id ответа', 'id участника', 'Имя участника', 'Название таблицы', 'Номер картинки', 'Ответ участника',
+               'Был показан']
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)  # at 0 row 0 column
     # Sheet body, remaining rows
     font_style = xlwt.XFStyle()
-    rows = Answer.objects.values_list('pk', 'member_id', 'member__name', 'table__name', 'answer', 'was_shown')
+    rows = Answer.objects.values_list('pk', 'member_id', 'member__name', 'table__name', 'image__num', 'answer',
+                                      'was_shown')
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
