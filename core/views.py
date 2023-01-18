@@ -213,7 +213,10 @@ def export_xls(request):
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], font_style)
+            if columns[col_num] == "Время показа":
+                ws.write(row_num, col_num, str(row[col_num]), font_style)
+            else:
+                ws.write(row_num, col_num, row[col_num], font_style)
     wb.save(response)
     return response
 
