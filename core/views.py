@@ -1,3 +1,5 @@
+import datetime
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 import random
@@ -170,10 +172,12 @@ def img_test(request, table_pk, member_pk):
         form = AnswerForm(request.POST, request.FILES)  # Выгрузить
         if form.is_valid():
             was_shown = (img.num <= 36)
+            answer_time = datetime.datetime.now()
             answer = Answer(answer=request.POST['answer'],
                             member=member,
                             image=img,
-                            was_shown=was_shown)  # Заполнить
+                            was_shown=was_shown,
+                            answer_time=answer_time)  # Заполнить
             answer.save()  # Сохранить
 
             next_table = table_pk + 1
@@ -199,13 +203,13 @@ def export_xls(request):
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
     columns = ['id ответа', 'id участника', 'Имя участника', 'Название таблицы', 'Номер картинки', 'Ответ участника',
-               'Был показан']
+               'Был показан', 'Время показа']
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)  # at 0 row 0 column
     # Sheet body, remaining rows
     font_style = xlwt.XFStyle()
     rows = Answer.objects.values_list('pk', 'member_id', 'member__name', 'table__name', 'image__num', 'answer',
-                                      'was_shown')
+                                      'was_shown', 'answer_time')
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):

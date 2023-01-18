@@ -129,6 +129,7 @@ class Answer(models.Model):
     image = models.ForeignKey(ImgSample, on_delete=models.SET_NULL, null=True, blank=True)
     answer = models.BooleanField()
     was_shown = models.BooleanField(null=True, blank=True)
+    answer_time = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return "{0} {1} {2} {3}".format(self.member, self.table, self.answer, self.was_shown)

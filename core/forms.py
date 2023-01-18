@@ -25,7 +25,7 @@ class AnswerForm(forms.ModelForm):
     class Meta:
         model = Answer
         fields = '__all__'
-        exclude = ('member', 'table', 'was_shown', 'image')
+        exclude = ('member', 'table', 'was_shown', 'image', 'answer_time')
 
 
 class UpdateForm(forms.ModelForm):
