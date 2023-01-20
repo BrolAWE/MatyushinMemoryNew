@@ -3,13 +3,15 @@ from django import forms
 from core.models import Member, Answer, Update
 
 TRUE_FALSE_CHOICES = (
+    (False, 'Нет'),
     (True, 'Да'),
-    (False, 'Нет')
 )
 
 
 class MemberForm(forms.ModelForm):
     """Форма создания участника"""
+    show_first = forms.ChoiceField(choices=TRUE_FALSE_CHOICES, label="Показать первую часть:",
+                                   initial='', widget=forms.Select(), required=True)
 
     class Meta:
         model = Member

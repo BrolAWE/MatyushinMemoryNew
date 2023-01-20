@@ -27,7 +27,8 @@ def start_img(request):
         form = MemberForm(request.POST, request.FILES)  # Выгрузить
         if form.is_valid():
             duration = int(request.POST['duration'])
-            member = Member(name=request.POST['name'], duration=duration, experiment="Картинки")
+            show_first = request.POST['show_first']
+            member = Member(name=request.POST['name'], duration=duration, experiment="Картинки", show_first=show_first)
             member.save()  # Сохранить
 
             images_second = list(ImgSample.objects.filter(second=True))  # Получить все таблицы
@@ -38,10 +39,11 @@ def start_img(request):
                 order = ColorOrder(member=member, image=table, position=i + 1)  # Элемент последовательности
                 order.save()  # Сохранить
 
-            if duration != 0:
+            print(show_first)
+            if show_first == "True":
                 first_table = ImgSample.objects.get(num=1, first=True)
                 return redirect('img_table', img_pk=first_table.num, member_pk=member.pk)
-            else:
+            elif show_first == "False":
                 context = {'next_table': 1, 'member_pk': member.pk}
                 return render(request, 'faq_img.html', context)
         else:
@@ -167,6 +169,14 @@ def img_test(request, table_pk, member_pk):
     """Тест на память"""
     member = Member.objects.get(pk=member_pk)
     table_pk = int(table_pk)
+    if table_pk == 1 and request.method == 'GET':
+        """Сохраняем время начала показа первой картинки"""
+        answer_time = datetime.datetime.now()
+        answer = Answer(answer=True,
+                        member=member,
+                        answer_time=answer_time)  # Заполнить
+        answer.save()  # Сохранить
+
     img = ColorOrder.objects.get(member=member_pk, position=table_pk).image
     if request.method == 'POST':
         form = AnswerForm(request.POST, request.FILES)  # Выгрузить
